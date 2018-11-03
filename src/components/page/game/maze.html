@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>迷宮</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        html,body{
+            background: radial-gradient(circle,#f40,gold);
+        }
+        .wrapper{
+            width: 700px;
+            margin: 100px auto;
+            /* border: 1px solid blue; */
+        }
+        .content{
+            width: 600px;
+            margin: 0 auto;
+            /* border: 1px solid green; */
+        }
+        .content ul{
+            width: 100%;
+        }
+        .content ul li{
+            position: relative;
+            width: 60px;
+            height: 60px;
+            box-sizing: border-box;
+            background-color: aliceblue;
+            float: left;
+            border-left: 2px solid black;
+            border-top: 2px solid black;
+        }
+        .content ul:nth-child(-n+8) li:nth-child(1){
+            border-top: none;
+        }
+        .content ul:nth-child(8) li:nth-child(n+2):nth-child(-n+4){
+            border: none;
+        }
+        .content ul:nth-child(n+4):nth-child(-n+8) li:nth-child(4){
+            border-top: none;
+        }
+        .content ul:nth-child(6) li:nth-child(n+4):nth-child(-n+8){
+            border: none;
+        }
+        .content ul:nth-child(n+5):nth-child(-n+9) li:nth-child(7){
+            border-top: none;
+        }
+        .content ul:nth-child(n+3):nth-child(-n+4) li:nth-child(6){
+            border-top: none;
+        }
+        .content ul:nth-child(4) li:nth-child(7){
+            border-left: none;
+        }
+        .content ul:nth-child(3) li:nth-child(n+6){
+            border-left: none;
+        }
+        .move{
+            width: 80%;
+            height: 80%;
+            background-color: bisque;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="content">
+            <ul>
+                <li><div class="move"></div></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        var oMove = document.getElementsByClassName("move")[0];
+        document.onkeydown = function(e){
+            var event = e || window.event;
+            switch(event.keyCode){
+               case 37:
+               oMove.style.left = oMove.offsetLeft - 5 + 'px';
+               break; 
+               case 38:
+               oMove.style.top = oMove.offsetTop - 5 + 'px';
+               break; 
+               case 39:
+               oMove.style.left = oMove.offsetLeft + 5 + 'px';
+               break; 
+               case 40:
+               oMove.style.top = oMove.offsetTop + 5 + 'px';
+               break; 
+            }
+            console.log(oMove.style.left,oMove.style.top);
+        }
+    </script>
+</body>
+</html>

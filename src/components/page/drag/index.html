@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        div{
+            width: 100px;
+            height: 100px;
+            background-color: bisque;
+            cursor: pointer;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script>
+        var oDiv = document.getElementsByTagName('div')[0];
+        drag(oDiv);
+    function drag(elem) {
+        var disX,
+            disY;
+            addEvent(elem, 'mousedown', function (e) {
+            var event = e || window.event;
+            disX = event.clientX - parseInt(getStyle(elem,'left'));
+            disY = event.clientY - parseInt(getStyle(elem,'top'));
+            document.onmousemove = function (e) {
+                var event = e || window.event;
+                elem.style.left = event.clientX - disX + 'px';
+                elem.style.top = event.clientY - disY + 'px';
+            };
+            addEvent(document, 'mouseup', function () {
+                document.onmousemove = null;
+            });
+        });
+    }
+    function addEvent(elem, type, handle) {
+        if (elem.addEventListener) {
+            elem.addEventListener(type, handle, false);
+        } else if (elem.attachEvent) {
+            elem.attachEvent('on' + type, function () {
+                handle.call(elem);
+            })
+        } else {
+            elem['on' + type] = handle;
+        }
+    }
+    function getStyle(elem, prop) {
+        if (window.getComputedStyle) {
+            return window.getComputedStyle(elem, null)[prop];
+        } else {
+            return elem.currentStyle[prop];
+        }
+    }
+    </script>
+</body>
+</html>

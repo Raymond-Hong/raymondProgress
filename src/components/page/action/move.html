@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .bang {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: orange;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bang"></div>
+    <script>
+        var oBang = document.getElementsByClassName('bang')[0];
+        oBang.onclick = function () {
+            idealMovement(this);
+        }
+        function idealMovement(obj) {
+            clearInterval(obj.timer);
+            var iSpeedX = 50, iSpeedY = 50;
+            obj.timer = setInterval(function () {
+                var newLeft = obj.offsetLeft + iSpeedX;
+                var newTop = obj.offsetTop + iSpeedY;
+                if (newTop >= document.documentElement.clientHeight - obj.offsetHeight) {
+                    iSpeedY *= -1;
+                    newTop = document.documentElement.clientHeight - obj.offsetHeight;
+                }
+                if (newTop <= 0) {
+                    iSpeedY *= -1;
+                    newTop = 0;
+                }
+                if (newLeft >= document.documentElement.clientWidth - obj.offsetWidth) {
+                    iSpeedX *= -1;
+                    newLeft = document.documentElement.clientWidth - obj.offsetWidth;
+                }
+                if (newLeft <= 0) {
+                    iSpeedX *= -1;
+                    newLeft = 0;
+                }
+                obj.style.left = newLeft + 'px';
+                obj.style.top = newTop + 'px';
+            }, 30);
+        }
+    </script>
+</body>
+
+</html>

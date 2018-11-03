@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick='file()'>创建一个文本文件</button>
+    <button onclick="seefile()">查看文件</button>
+    <script type="text/javascript">
+        function file() {
+
+            var fso;
+            try {
+            fso = new ActiveXObject("Scripting.FileSystemObject");
+
+            } catch (e) {
+            alert("当前浏览器不支持");
+            return;
+            }
+
+            alert("方法已执行2");
+            var f1 = fso.createtextfile("C:\\Users\\raymond\\Desktop\\ray1.txt", true);
+            f1.write("这是一个文本文档");
+            var openf1 = fso.OpenTextFile("ray1.txt");
+
+            str = openf1.ReadLine();
+            alert("里面的内容为'" + str + "'");
+
+
+        }
+
+        function seefile() {
+            var fso;
+            try {
+            fso = new ActiveXObject("Scripting.FileSystemObject");
+
+            } catch (e) {
+                alert("当前浏览器不支持");
+            return;
+            }
+            var openf1,str;
+            try {
+                openf1 = fso.OpenTextFile("ray2.txt");
+                str = openf1.ReadLine();
+                var oDiv = document.createElement('div');
+                oDiv.innerText = "里面的内容为'" + str + "'";
+                document.body.appendChild(oDiv);
+            } catch (error) {
+                alert('文件未找到');
+            }
+
+        }
+
+        </script>
+</body>
+</html>

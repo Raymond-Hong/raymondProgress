@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>turn page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .wrapper {
+            width: 400px;
+            height: 250px;
+            margin: 100px auto 0;
+            /* border: 1px solid blue; */
+        }
+    </style>
+    <script src="js/config.js"></script>
+    <script src="js/createTurnPage.js"></script>
+</head>
+<body>
+   <div class="wrapper"></div>
+    <script>
+      var oDiv = document.getElementsByClassName('wrapper')[0];
+      oDiv.createTurnPage(['img/cat1.jpg','img/cat2.jpg','img/cat3.jpg','img/cat4.jpg']);
+    </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .wrapper {
+            width: 400px;
+            height: 250px;
+            position: relative;
+            margin: 100px auto 0;
+            overflow: hidden;
+        }
+
+        .wrapper .sliderPage {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2000px;
+            height: 250px;
+        }
+
+        .wrapper .sliderPage li {
+            width: 400px;
+            height: 250px;
+            float: left;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .btn {
+            width: 40px;
+            height: 40px;
+            background-color: black;
+            position: absolute;
+            text-align: center;
+            line-height: 40px;
+            color: #fff;
+            top: 50%;
+            margin-top: -20px;
+            opacity: 0.1;
+            cursor: pointer;
+        }
+
+        .wrapper:hover .btn {
+            opacity: 0.7;
+        }
+
+        .leftBtn {
+            left: 15px;
+        }
+
+        .wrapper .rightBtn {
+            right: 15px;
+        }
+
+        .sliderIndex {
+            position: absolute;
+            width: 100%;
+            bottom: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .sliderIndex span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-right: 15px;
+        }
+
+        .wrapper .sliderIndex .active {
+            background-color: #f40;
+        }
+    </style>
+    <script src="../../../config/tools.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <ul class="sliderPage">
+            <li>
+                <img src="img/cat1.jpg" alt="">
+            </li>
+            <li>
+                <img src="img/cat2.jpg" alt="">
+            </li>
+            <li>
+                <img src="img/cat3.jpg" alt="">
+            </li>
+            <li>
+                <img src="img/cat4.jpg" alt="">
+            </li>
+            <li>
+                <img src="img/cat1.jpg" alt="">
+            </li>
+        </ul>
+        <div class="btn leftBtn">&lt;</div>
+        <div class="btn rightBtn">&gt;</div>
+        <div class="sliderIndex">
+            <span class="active"></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <script>
+        var oUl = document.getElementsByClassName('sliderPage')[0];
+        var lock = false;
+        var oLi = oUl.getElementsByTagName('li');
+        var len = oLi.length;
+        var moveWidth = oUl.offsetWidth / len;
+        var maxRight = -oUl.offsetWidth * (len - 1) / len;
+        var index = 0;
+        var lastIndex = 0;
+        var oSpanArr = document.getElementsByClassName('sliderIndex')[0].getElementsByTagName('span');
+        var delay = 2000;
+        function autoMove(direction) {
+            return function () {
+                if (lock) {
+                    return;
+                }
+                lock = true;
+                clearTimeout(timer);
+                var newLeft;
+                if (!direction || direction == 'left->right') {
+                    index++;
+                    if (this.offsetLeft == maxRight) {
+                        this.style.left = 0;
+                    }
+                    if (index == len - 1) {
+                        index = 0;
+                    }
+                    newLeft = this.offsetLeft - moveWidth;
+                } else if (direction == 'right->left') {
+                    index--;
+                    if (this.offsetLeft == 0) {
+                        this.style.left = maxRight + 'px';
+                    }
+                    if (index < 0) {
+                        index = 3;
+                    }
+                    newLeft = this.offsetLeft + moveWidth;
+                }
+                oSpanArr[lastIndex].className = '';
+                oSpanArr[index].className = 'active';
+                lastIndex = index;
+                dynamicProp(this, { left: newLeft }, function () {
+                    window.timer = setTimeout(autoMove(direction).bind(this), delay);
+                    lock = false;
+                }.bind(this));
+            };
+        }
+        var timer = setTimeout(autoMove().bind(oUl), delay);
+        var oLeftBtn = document.getElementsByClassName('leftBtn')[0];
+        var oRightBtn = document.getElementsByClassName('rightBtn')[0];
+        oLeftBtn.onclick = function () {
+            autoMove('right->left').call(oUl);
+        }
+        oRightBtn.onclick = function () {
+            autoMove('left->right').call(oUl);
+        };
+        // var spans = [].slice.call(oSpanArr, 0);
+        // spans.forEach(function (ele, index) {
+        [].slice.call(oSpanArr, 0).forEach(function (ele, index) {
+            ele.onclick = function () {
+                lock = true;
+                clearTimeout(timer);
+                oSpanArr[lastIndex].className = '';
+                oSpanArr[index].className = 'active';
+                lastIndex = index;
+                window.index = index;
+                dynamicProp(oUl, { left: -index * moveWidth }, function () {
+                    timer = setTimeout(autoMove().bind(oUl), delay);
+                    lock = false;
+                })
+            }
+        });
+    </script>
+</body>
+
+</html>

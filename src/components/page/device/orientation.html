@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>deviceOrientation測試</title>
+</head>
+
+<body>
+  <div id="oDiv"></div>
+  <script>
+    oDiv.innerHTML = 'good';
+    window.addEventListener('deviceorientation', _cb);
+
+    function _cb(event) {
+      console.log(event)
+      // oDiv.innerHTML = event.alpha;
+      if (event.alpha > 45) {
+        oDiv.innerHTML = 'alpha' + event.alpha;
+      }
+      if (event.gamma > 45) {
+        oDiv.innerHTML = 'gamma:' + event.gamma;
+      }
+      if (event.beta > 45) {
+        oDiv.innerHTML = 'beta:' + event.beta;
+      }
+    }
+
+  </script>
+</body>
+
+</html>

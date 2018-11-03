@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            /* background-color: orange; */
+            border-radius: 50%;
+            opacity: 0.5;
+            /* box-shadow: 5px 5px 5px blue; */
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function randomColor(){
+            var colorArr = [];
+            do{
+                colorArr[colorArr.length] = (~~(Math.random()*255)).toString(16);
+            }while(colorArr.length<3);
+            return '#'+colorArr.join("");
+        }
+        var oThread = [];
+        setInterval(function(){
+            var oDiv = document.createElement('div');
+            oDiv.style.backgroundColor = randomColor();
+            console.log(oDiv.style.backgroundColor);
+            oDiv.style.left = Math.random()*(document.documentElement.clientWidth-oDiv.offsetWidth-1) + 'px';
+            oDiv.style.top = Math.random()*(document.documentElement.clientHeight-oDiv.offsetHeight-1) + 'px';
+            document.body.appendChild(oDiv);
+            idealMovement(oDiv);
+            oThread.push(oDiv);
+            if(oThread.length>20){
+                clearInterval(oThread[0].timer);
+                oThread[0].style.display = 'none';
+                oThread.splice(0,1);
+            }
+        },1000);
+        function idealMovement(obj) {
+            clearInterval(obj.timer);
+            var iSpeedX = 5, iSpeedY = 5;
+            obj.timer = setInterval(function () {
+                var newLeft = obj.offsetLeft + iSpeedX;
+                var newTop = obj.offsetTop + iSpeedY;
+                if (newTop >= document.documentElement.clientHeight - obj.offsetHeight) {
+                    iSpeedY *= -1;
+                    newTop = document.documentElement.clientHeight - obj.offsetHeight;
+                }
+                if (newTop <= 0) {
+                    iSpeedY *= -1;
+                    newTop = 0;
+                }
+                if (newLeft >= document.documentElement.clientWidth - obj.offsetWidth) {
+                    iSpeedX *= -1;
+                    newLeft = document.documentElement.clientWidth - obj.offsetWidth;
+                }
+                if (newLeft <= 0) {
+                    iSpeedX *= -1;
+                    newLeft = 0;
+                }
+                obj.style.left = newLeft + 'px';
+                obj.style.top = newTop + 'px';
+            }, 30);
+        }
+    </script>
+</body>
+</html>

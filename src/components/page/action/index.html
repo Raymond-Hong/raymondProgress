@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .div{
+        position: absolute;
+        left: 700px;
+        top: 0px;
+        width: 100px;
+        height: 100px;
+        background-color: orange;
+        opacity: 1;
+    }
+    button{
+        margin-top: 150px;
+        color: #fff;
+        background-color: bisque;
+        width: 50px;
+        height: 30px;
+        border-radius: 50%;
+    }
+    span{
+        position: absolute;
+        left: 300px;
+        width: 1px;
+        height: 100px;
+        background-color: #000;
+    }
+    .wrapper{
+        width: 400px;
+        height: 80px;
+        background-color: yellow;
+        position: absolute;
+        left: -400px;
+        top: 300px;
+        cursor: progress;
+    }
+    .wrapper .show{
+        position: absolute;
+        right: -40px;
+        top: 0;
+        background-color: orange;
+        width: 40px;
+        height: 80px;
+    }
+
+    /* div {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 40px;
+        background-color: blue;
+        border: 0 solid black;
+    } */
+</style>
+
+<body>
+    <!-- <div class="div">1</div>
+    <span></span>
+    <button>run</button>
+    <div class="wrapper">
+        <div class="show"></div>
+    </div> -->
+    <!-- <div></div>
+    <div></div>
+    <div></div>
+    <div></div> -->
+    <input type="text" id="inp">
+    <script>
+        // var oDivArray = document.getElementsByTagName('div');
+        // oDivArray = [].slice.call(oDivArray, 0);
+        // oDivArray.forEach(function (ele, index, self) {
+        //     var _this = this[index];
+        //     var originTarget,finalTarget,attr;
+        //     for(var prop in _this){
+        //         originTarget = getStyle(ele,prop);
+        //         finalTarget = _this[prop];
+        //         attr = prop;
+        //         if(attr == 'opacity'){
+        //             originTarget = ~~(parseFloat(originTarget)*100);
+        //             console.log(originTarget);
+        //         }else{
+        //             originTarget = parseInt(originTarget);
+        //         }
+        //     }
+        //     ele.onmouseenter = function () {
+        //         startMove(this,finalTarget,attr);
+        //     }
+        //     ele.onmouseleave = function () {
+        //         startMove(this,originTarget,attr);
+        //     }
+        // },[{width:400},{height:200},{opacity:10},{borderWidth:100}]);
+        // var oDiv = document.getElementsByTagName('div')[0];
+        // var oBtn = document.getElementsByTagName('button')[0];
+        // function buy(e){
+        //     console.log(this,e);
+        //     return function(){
+        //         oDiv.innerText = parseInt(oDiv.innerText) + add;
+        //     }
+        // }
+        // oBtn.onclick = throttle(buy,1000);
+        // // function () {
+        // //     // startMove(oDiv,{left:300});
+        // // }
+        // function throttle(handler,wait){
+        //     var lastTime = 0;
+        //     return function (e){
+        //         var nowTime = new Date().getTime();
+        //         if(nowTime - lastTime>wait){
+        //             handler.apply(this,arguments);
+        //             lastTime = nowTime;
+        //         }
+        //     }
+        // }
+        function debounce (handler,delay){
+            var timer = null;
+            return function(){
+                var _self = this, _arg = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function(){
+                    handler.apply(_self,_arg);
+                },delay);
+            }
+        }
+        inp.oninput = debounce(ajax,2000);
+        function ajax(e){
+            console.log(e,this.value);
+        }
+        // function startMove(obj, json, callBack) {
+        //     clearInterval(obj.timer);
+        //     var iSpeed, iCur;
+        //     obj.timer = setInterval(function () {
+        //         var bStop = true;
+        //         for (var attr in json) {
+        //             if (attr == 'opacity') {
+        //                 iCur = parseFloat(getStyle(obj, 'opacity')) * 100;
+        //             } else {
+        //                 iCur = parseInt(getStyle(obj, attr));
+        //             }
+        //             iSpeed = (json[attr] - iCur) / 7;
+        //             iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
+        //             if (attr == 'opacity') {
+        //                 obj.style.opacity = (iCur + iSpeed) / 100;
+        //             } else {
+        //                 obj.style[attr] = iCur + iSpeed + 'px';
+        //             }
+        //             if (json[attr] != iCur) {
+        //                 bStop = false;
+        //             }
+        //         }
+        //         if (bStop) {
+        //             clearInterval(obj.timer);
+        //             typeof callBack == 'function' ? callBack() : '';
+        //         }
+        //     }, 30);
+        // }
+        // var oDivWrapper = document.getElementsByClassName('wrapper')[0];
+        // oDivWrapper.onmouseenter = function () {
+        //     startMove(this,0);
+        // }
+        // oDivWrapper.onmouseleave = function () {
+        //     startMove(this,-400);
+        // }
+
+        function getStyle(elem, prop) {
+            if (window.getComputedStyle) {
+                return window.getComputedStyle(elem, null)[prop];
+            } else {
+                return elem.currentStyle[prop];
+            }
+        }
+    </script>
+</body>
+
+</html>

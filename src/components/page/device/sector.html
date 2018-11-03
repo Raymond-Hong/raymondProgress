@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sector</title>
+    <style>
+        .pie{
+            width: 140px;
+            height: 140px;
+            background: #8BC34A;
+            border-radius: 50%;
+            background-image: linear-gradient(.1turn,transparent 50%,#655 0);
+        }
+        .pie::before{
+            content: '';
+            display: block;
+            margin-left: 50%;
+            height: 100%;
+            border-radius: 0 100% 100% 0/50%;
+            background-color: inherit;
+            transform-origin: left;
+            /* 10% */
+            transform: rotate(.1turn);
+            /* 20% */
+            transform: rotate(.2turn);
+            /* 30% */
+            transform: rotate(.3turn);
+        }
+    </style>
+</head>
+<body>
+    <div class="pie"></div>
+</body>
+</html>

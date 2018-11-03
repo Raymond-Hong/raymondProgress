@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gomoku</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        body {
+            background: radial-gradient(circle, aqua, pink);
+        }
+
+        .wrapper {
+            width: 700px;
+            margin: 0 auto;
+            /* border: 1px solid green; */
+            text-align: center;
+        }
+
+        .content {
+            width: 600px;
+            height: 600px;
+            margin: 40px auto 0;
+            padding: 50px 10px 10px 50px;
+            background-color: blanchedalmond;
+        }
+
+        .content ul {
+            width: 100%;
+        }
+
+        .content ul li {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            box-sizing: border-box;
+            float: left;
+            border-left: 2px solid black;
+            border-top: 2px solid black;
+        }
+
+        .content ul li:nth-child(15) {
+            border: 0;
+            border-left: 2px solid black;
+        }
+
+        .content ul:nth-child(15) li {
+            border: 0;
+            border-top: 2px solid black;
+        }
+
+        .content ul:nth-child(15) li:nth-child(15) {
+            border: 0;
+        }
+
+        .chesspiece {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            margin-left: -19px;
+            margin-top: -19px;
+        }
+
+        .blackPiece[current=true]::before,
+        .whitePiece[current=true]::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 3px;
+            background-color: red;
+            margin-top: 16px;
+        }
+
+        .whitePiece {
+            background-color: aliceblue;
+        }
+
+        .blackPiece {
+            background-color: black;
+        }
+
+        .footer button {
+            width: 100px;
+            height: 40px;
+            border-radius: 5px;
+            background-color: brown;
+            color: aliceblue;
+            display: inline-block;
+            text-align: center;
+            cursor: pointer;
+            opacity: 0.4;
+        }
+
+        .footer .newGame {
+            opacity: 1;
+        }
+
+        .wrapper .header {
+            position: absolute;
+            width: 400px;
+            height: 200px;
+            color: #dee;
+            left: 50%;
+            margin-left: -200px;
+        }
+
+        .wrapper .header span {
+            font-size: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <span></span>
+        </div>
+        <div class="content">
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+                <li>
+                    <div class="chesspiece"></div>
+                </li>
+            </ul>
+        </div>
+        <div class="footer">
+            <button class="newGame">新游戏</button>
+            <button class="pickBlack">电脑执黑</button>
+            <button class="pickWhite">电脑执白</button>
+        </div>
+    </div>
+    <script>
+        var chessArr = [].slice.call(document.getElementsByClassName('chesspiece'), 0);
+        var blackArr = [];
+        var whiteArr = [];
+        var pickBlackBtn = document.getElementsByClassName('pickBlack')[0];
+        var pickWhiteBtn = document.getElementsByClassName('pickWhite')[0];
+        var newGameBtn = document.getElementsByClassName('newGame')[0];
+        var oSpan = document.getElementsByTagName('span')[0];
+        var game = (function IMEF() {
+            var baseNum = 3;
+            return newGame();
+            function newGame() {
+                clear(blackArr);
+                clear(whiteArr);
+                pickWhiteBtn.style.opacity = 0.4;
+                pickBlackBtn.style.opacity = 0.4;
+                oSpan.innerText = '';
+                return {
+                    five: 5,
+                    over: false,
+                    start: false,
+                    toWhich: 'blackPiece',
+                    computerPickBlack: false,
+                    computerPickWhite: false,
+                    thinkingText: '电脑思考中',
+                    blackWinText: '黑胜!',
+                    whiteWinText: '白胜!',
+                    blackWin: false,
+                    whiteWin: false,
+                    allState: {
+                        across: 'across',
+                        vertical: 'vertical',
+                        deg45: 'deg45',
+                        deg135: 'deg135'
+                    },
+                    newGame: newGame,
+                    checkWin: checkWin
+                }
+            }
+            function clear(arr) {
+                while (arr.length) {
+                    arr[0].haveChess = false;
+                    arr[0].className = 'chesspiece';
+                    arr.splice(0, 1);
+                }
+            }
+            function InitChessArr(chess) {
+                this.arr = [];
+                while (this.arr.length < baseNum) {
+                    //為什麼是3?因為分橫、豎、斜45、斜135四個方向判斷 
+                    //跟當前棋子相連的棋子，每個方向最多有兩個
+                    //再根據這兩個判斷,最多有三個
+                    //✪○◎○◎○✪
+                    //例如上面:通過中間的○可以找到兩個◎;再通過◎可以找到三個○;再通過三個○只能找到兩個✪(◎已經找到過不會出現)
+                    //最多能找到3個,所以是3
+                    this.arr[this.arr.length] = JSON.parse(JSON.stringify(chess));
+                }
+            }
+            function FlagArr() {
+                this.arr = [];
+                while (this.arr.length < baseNum) {
+                    this.arr[this.arr.length] = false;
+                }
+            }
+            function checkWin(arr, direction, real) {
+                //基於當前所下棋子判斷
+                var chessArr = new InitChessArr(this).arr;
+                var inlineArr = [], linkArr = [], len, flag,
+                    newArr = arr.filter(function (ele, index, self) {
+                        switch (direction) {
+                            case 'across':
+                                //橫向過慮
+                                return ele.y == this.y;
+                            case 'vertical':
+                                //豎向過濾
+                                return ele.x == this.x;
+                            case 'deg45':
+                                //45度斜過濾
+                                return (ele.x - this.x) == (this.y - ele.y);
+                            default:
+                                //135度斜過濾
+                                return (ele.x - this.x) == (ele.y - this.y);
+                        }
+                    }, this);
+                inlineArr = [].concat(newArr);
+                if (real && newArr.length < game.five) {
+                    return false;
+                }
+                while (true) {
+                    if (len === newArr.length) {
+                        //newArr的長度不再變化,表明沒有連著的棋子了,跳出循環
+                        break;
+                    }
+                    len = newArr.length;
+                    flag = new FlagArr().arr;
+                    newArr = newArr.filter(function (ele, index, self) {
+                        for (var i = 0; i < flag.length; i++) {
+                            if (!flag[i]) {
+                                switch (direction) {
+                                    case 'across':
+                                        //橫向獲取跟chessArr[i]相連的棋子
+                                        if (Math.abs(ele.x - chessArr[i].x) == 1) {
+                                            flag[i] = true;
+                                            //把相連的棋子放到一起
+                                            linkArr.push(JSON.parse(JSON.stringify(ele)));
+                                            //改變chessArr[i]為當前找到的相連棋子
+                                            chessArr[i] = JSON.parse(JSON.stringify(ele));
+                                            return false;
+                                        }
+                                        break;
+                                    case 'vertical':
+                                        //豎向獲取跟chessArr[i]相連的棋子
+                                        if (Math.abs(ele.y - chessArr[i].y) == 1) {
+                                            flag[i] = true;
+                                            linkArr.push(JSON.parse(JSON.stringify(ele)));
+                                            chessArr[i] = JSON.parse(JSON.stringify(ele));
+                                            return false;
+                                        }
+                                        break;
+                                    default:
+                                        //斜向獲取跟chessArr[i]相連的棋子
+                                        if (Math.abs(ele.y - chessArr[i].y) == 1) {
+                                            flag[i] = true;
+                                            linkArr.push(JSON.parse(JSON.stringify(ele)));
+                                            chessArr[i] = JSON.parse(JSON.stringify(ele));
+                                            return false;
+                                        }
+                                }
+                            }
+                        }
+                        return true;
+                    });
+                    if (!flag[2]) {
+                        //因為一個chessArr[i]只能找一個相連棋子
+                        //當一開始找到一個相連時,之後這個相連棋子有可能找到兩個相連的
+                        //所以需要多個同樣的chessArr[i]
+                        chessArr[2] = chessArr[0];
+                    }
+                }
+                if (real) {
+                    return linkArr.length == game.five;
+                }
+                return {
+                    linkArr: linkArr.length&&linkArr||linkArr.concat(this),
+                    inlineArr: inlineArr
+                };
+            }
+        }());
+        chessArr.forEach(function (ele, index) {
+            //給棋子添加坐標
+            ele.x = index % 15;
+            ele.y = ~~(index / 15);
+            ele.disIndex = index;
+            //給棋子添加點擊事件
+            ele.onclick = function () {
+                if (game.over) {
+                    return;
+                }
+                if (!this.haveChess) {
+                    //標記已下棋子
+                    this.haveChess = true;
+                    //顯示棋子
+                    this.className = 'chesspiece ' + game.toWhich;
+                    //判斷當前是 黑棋 或白棋 在下棋
+                    if (whiteArr.length) {
+                        whiteArr[whiteArr.length - 1].setAttribute('current', false);
+                    }
+                    if (blackArr.length) {
+                        blackArr[blackArr.length - 1].setAttribute('current', false);
+                    }
+                    if (blackArr.length + whiteArr.length == chessArr.length - 1) {
+                        game.over = true;
+                    }
+                    this.setAttribute('current', true);
+                    if (game.toWhich == 'blackPiece') {
+                        //添加到黑棋數組
+                        blackArr.push(this);
+                        //切換白棋,輪流下棋
+                        game.toWhich = 'whitePiece';
+                        //判斷黑棋是否贏了
+                        if (winOrNot(blackArr, this)) {
+                            game.over = true;
+                            game.blackWin = true;
+                            oSpan.innerText = game.blackWinText;
+                        }
+
+                        if (game.computerPickWhite) {
+                            pickWhiteBtn.innerText = game.thinkingText;
+                            setTimeout(function () {
+                                computerPlay.call(this);
+                                pickWhiteBtn.innerText = '电脑执白';
+                            }.bind(this), 10);
+                        }
+                    } else {
+                        //添加到白棋數組
+                        whiteArr.push(this);
+                        //切換黑棋,輪流下棋
+                        game.toWhich = 'blackPiece';
+                        //判斷白棋是否贏了
+                        if (winOrNot(whiteArr, this)) {
+                            game.over = true;
+                            game.whiteWin = true;
+                            oSpan.innerText = game.whiteWinText;
+                        }
+                        if (game.computerPickBlack) {
+                            pickBlackBtn.innerText = game.thinkingText;
+                            setTimeout(function () {
+                                computerPlay.call(this);
+                                pickBlackBtn.innerText = '电脑执黑';
+                            }.bind(this), 10);
+                        }
+                    }
+                    if (game.over && !oSpan.innerText) {
+                        oSpan.innerText = "和棋了~!"
+                    }
+                }
+            }
+        });
+        pickBlackBtn.onclick = function () {
+            game.computerPickBlack = !game.computerPickBlack;
+            if (game.computerPickBlack) {
+                game.computerPickWhite = false;
+                pickWhiteBtn.style.opacity = 0.4;
+                pickBlackBtn.style.opacity = 1;
+                if (game.toWhich == 'blackPiece') {
+                    if (whiteArr.length) {
+                        this.innerText = game.thinkingText;
+                        setTimeout(function () {
+                            computerPlay.call(whiteArr[blackArr.length - 1]);
+                            this.innerText = '电脑执黑';
+                        }.bind(this), 10);
+                    } else {
+                        this.innerText = game.thinkingText;
+                        setTimeout(function () {
+                            computerPlay.call(chessArr[~~(chessArr.length / 2)]);
+                            this.innerText = '电脑执黑';
+                        }.bind(this), 10);
+                    }
+                }
+            } else {
+                pickBlackBtn.style.opacity = 0.4;
+            }
+        }
+        pickWhiteBtn.onclick = function () {
+            game.computerPickWhite = !game.computerPickWhite;
+            if (game.computerPickWhite) {
+                game.computerPickBlack = false;
+                pickWhiteBtn.style.opacity = 1;
+                pickBlackBtn.style.opacity = 0.4;
+                if (game.toWhich == 'whitePiece') {
+                    if (blackArr.length) {
+                        this.innerText = game.thinkingText;
+                        setTimeout(function () {
+                            computerPlay.call(blackArr[blackArr.length - 1]);
+                            this.innerText = '电脑执白';
+                        }.bind(this), 10);
+                    } else {
+                        this.innerText = game.thinkingText;
+                        setTimeout(function () {
+                            computerPlay.call(chessArr[~~(chessArr.length / 2)]);
+                            this.innerText = '电脑执白';
+                        }.bind(this), 10);
+                    }
+                }
+            } else {
+                pickWhiteBtn.style.opacity = 0.4;
+            }
+        }
+        newGameBtn.onclick = function () {
+            game = game.newGame();
+        }
+        function getAroundIndex(index) {
+            var times = 0;
+            var arr = [index - 1, index + 1, index - 14, index + 14, index - 16, index + 16, index - 15, index + 15];
+            var flag = new Array(arr.length);
+            var num;
+            return function () {
+                do {
+                    num = ~~(Math.random() * arr.length);
+                    times++;
+                } while ((flag[num] || arr[num] < 0 || arr[num] >= chessArr.length) && times < 10);
+                flag[num] = true;
+                return arr[num];
+            }
+        }
+        function getIndexObj(i, obj, existArr,resultArr) {
+            if (obj) {
+                return obj;
+            }
+            obj = {
+                index: i,
+                score: 0
+            };
+            for (var j = 0; j < existArr.length; j++) {
+                if (i == existArr[j].index) {
+                    obj = existArr[j];
+                    return obj;
+                }
+            }
+            resultArr.push(obj);
+            return obj;
+        }
+        function hasOtherChessLink(arr, prop) {
+            arr = [].concat(arr);
+            var before = arr[0], 
+                beforeIndex, 
+                len = arr.length, 
+                after = arr[0], 
+                afterIndex, result = { result: 0,bfEmpty:'',afEmpty:'',before:0,after:0 };
+            for (var i = 1; i < len; i++) {
+                if (arr[i]&&before.disIndex > arr[i].disIndex) {
+                    before = arr[i];
+                }
+                if (arr[i]&&after.disIndex < arr[i].disIndex) {
+                    after = arr[i];
+                }
+            }
+            switch (prop) {
+                case 'across':
+                    beforeIndex = before.disIndex - 1;
+                    afterIndex = after.disIndex + 1;
+                    result.bfEmpty = beforeIndex - 1;
+                    result.afEmpty = afterIndex + 1;
+                    break;
+                case 'vertical':
+                    beforeIndex = before.disIndex - 15;
+                    afterIndex = after.disIndex + 15;
+                    result.bfEmpty = beforeIndex - 15;
+                    result.afEmpty = afterIndex + 15;
+                    break;
+                case 'deg45':
+                    beforeIndex = before.disIndex - 14;
+                    afterIndex = after.disIndex + 14;
+                    result.bfEmpty = beforeIndex - 14;
+                    result.afEmpty = afterIndex + 14;
+                    break;
+                case 'deg135':
+                    beforeIndex = before.disIndex - 16;
+                    afterIndex = after.disIndex + 16;
+                    result.bfEmpty = beforeIndex - 16;
+                    result.afEmpty = afterIndex + 16;
+                    break;
+            }
+            if (beforeIndex >= 0 && !chessArr[beforeIndex].haveChess) {
+                switch (prop) {
+                    case 'across':
+                    if(chessArr[beforeIndex].y==before.y){
+                        result.result++;
+                    }
+                        break;
+                    case 'vertical':
+                    if(chessArr[beforeIndex].x==before.x){
+                        result.result++;
+                    }
+                        break;
+                    case 'deg45':
+                    // debugger;
+                    if(chessArr[beforeIndex].x>before.x){
+                        result.result++;
+                    }
+                    break;
+                    case 'deg135':
+                    if(chessArr[beforeIndex].x<before.x){
+                        result.result++;
+                    }
+                        break;
+                }
+                result.before = beforeIndex;
+            }
+            if (afterIndex < chessArr.length && !chessArr[afterIndex].haveChess) {
+                switch (prop) {
+                    case 'across':
+                    if(chessArr[afterIndex].y==after.y){
+                        result.result++;
+                    }
+                        break;
+                    case 'vertical':
+                    if(chessArr[afterIndex].x==after.x){
+                        result.result++;
+                    }
+                        break;
+                    case 'deg45':
+                    if(chessArr[afterIndex].x<after.x){
+                        result.result++;
+                    }
+                    break;
+                    case 'deg135':
+                    if(chessArr[afterIndex].x>after.x){
+                        result.result++;
+                    }
+                        break;
+                }
+                result.after = afterIndex;
+            }
+            return result;
+        }
+        function getMaxPoint(arr, existArr, attack) {
+            var resultArr = [].concat(existArr), obj = {};
+            for (var i = 0; i < chessArr.length; i++) {
+                // if(i==110){
+                //     debugger;
+                // }
+                if (!chessArr[i].haveChess) {
+                    obj[i] = getIndexObj(i, obj[i], existArr,resultArr);
+                    for (var prop in game.allState) {
+                        if (game.allState.hasOwnProperty(prop)) {
+                            var iChessArr = arr.concat(chessArr[i]);
+                            var resultObj = game.checkWin.call(chessArr[i], iChessArr, prop);
+                            var linLen = resultObj.linkArr.length;
+                            if (linLen&&linLen != 5) {
+                                // debugger;
+                                var otherEmpty = hasOtherChessLink(resultObj.linkArr, prop);
+                                switch (otherEmpty.result) {
+                                    case 0:
+                                        break;
+                                    case 1:
+                                        if(linLen-1>1){
+                                            addScore(obj[i], linLen - 1, attack,prop);
+                                        }
+                                        break;
+                                    case 2:
+                                        if (resultObj.inlineArr.length > linLen && linLen <= 3) {
+                                            var inlineLen = resultObj.inlineArr.filter(function (ele) {
+                                                return ele.disIndex == otherEmpty.bfEmpty || ele.disIndex == otherEmpty.afEmpty;
+                                            }).length;
+                                            if (inlineLen) {
+                                                if(linLen<3){
+                                                    if(resultObj.inlineArr.length - linLen == 1){
+                                                        (hasOtherChessLink(resultObj.linkArr.concat(chessArr[otherEmpty.before]), prop).result != 2||
+                                                        hasOtherChessLink(resultObj.linkArr.concat(chessArr[otherEmpty.after]), prop).result != 2)
+                                                        &&addScore(obj[i], linLen, attack,prop)||addScore(obj[i], linLen + 1, false,prop);
+                                                    }else{
+                                                        addScore(obj[i], linLen + 1, attack,prop);
+                                                    }
+                                                }else{
+                                                    addScore(obj[i], linLen + 1, attack,prop);
+                                                }
+                                            } else {
+                                                addScore(obj[i], linLen, attack,prop);
+                                            }
+                                        } else {
+                                            addScore(obj[i], linLen, attack,prop);
+                                        }
+                                        break;
+                                }
+                            }else{
+                                addScore(obj[i], linLen, attack);
+                            }
+                        }
+                    }
+                }
+            }
+            return resultArr;
+        }
+        function addScore(obj, num, attack,prop) {
+            switch (num) {
+                case 5:
+                    obj.score += attack ? 1000000 : 100000;
+                    break;
+                case 4:
+                    obj.score += attack ? 10000 : 999;
+                    break;
+                case 3:
+                    obj.score += attack ? 100 : 99;
+                    break;
+                case 2:
+                    obj.score += attack ? 10 : 4;
+                    break;
+                default:
+                    break;
+            }
+        }
+        function computerPlay() {
+            if (game.over) {
+                return;
+            }
+            var playIndex,
+                times = 0,
+                getAi,
+                obj,
+                attackArr = [];
+            defendArr = [];
+            if (this != window) {
+                getAi = getAroundIndex(this.disIndex);
+            }
+            if (game.toWhich == 'blackPiece') {
+                defendArr = [].concat(whiteArr);
+                attackArr = [].concat(blackArr);
+            } else {
+                defendArr = [].concat(blackArr);
+                attackArr = [].concat(whiteArr);
+            }
+            do {
+                if (defendArr.length && times++ < 8) {
+                    obj = getMaxPoint(defendArr, []);
+                    obj = getMaxPoint(attackArr, obj, true);
+                    var play = obj.reduce(function(pre,item){
+                        return pre.score>item.score?pre:item;
+                    },obj[0])
+                    var playArr = obj.filter(function(ele){
+                        return ele.score == this;
+                    },play.score)
+                    console.log(play.score,play.index);
+                    playIndex = playArr[~~(Math.random()*playArr.length)].index;
+                } else if (!chessArr[112].haveChess) {
+                    playIndex = 112;
+                } else if (this != window && times++ < 8) {
+                    playIndex = getAi();
+                } else {
+                    playIndex = ~~(Math.random() * chessArr.length);
+                }
+            } while (chessArr[playIndex].haveChess);
+            chessArr[playIndex].onclick();
+        }
+        function winOrNot(arr, chess) {
+            if (arr.length < game.five) {
+                return;
+            }
+            for (var prop in game.allState) {
+                if (game.allState.hasOwnProperty(prop)) {
+                    if (game.checkWin.call(chess, arr, prop, true)) {
+                        console.log('win', prop);
+                        return true;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
