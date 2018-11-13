@@ -429,3 +429,26 @@ function getSingle(func) {
     return result;
   }
 }
+// requestAnimationFrame 使用
+const usingRAF = (function () {
+  let rafId, lastTime = 0;
+  return function (fn, obj, delay = 0) {
+      if (typeof fn != 'function' || typeof obj != 'object' || typeof obj.stop != 'boolean') {
+          throw ('missing parameter');
+          return;
+      }
+      rafId = window.requestAnimationFrame(passValue);
+      return passValue;
+      function passValue(timestamp) {
+        if (!obj.stop) {
+            if (timestamp - delay >= lastTime) {
+                lastTime = timestamp;
+                fn.call(null, timestamp);
+            }
+            rafId = window.requestAnimationFrame(passValue);
+        } else {
+            window.cancelAnimationFrame(rafId);
+        }
+      }
+  }
+}());
