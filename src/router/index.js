@@ -18,7 +18,7 @@ import zoomMap from '../components/page/map/zoomMap'
 import lnglatMap from '../components/page/map/lnglatMap'
 import hotspotMap from '../components/page/map/hotspotMap'
 import questions from "../components/page/qa/questions"
-import twentyfe from '../components/page/game/twentyFourtyEight'
+import twentyfe from '../components/page/game/2048/twentyFourtyEight'
 import touch from '../components/page/touchTest/touch'
 
 Vue.use(Router)
