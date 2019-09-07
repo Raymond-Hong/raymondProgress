@@ -1,4 +1,22 @@
-const consideredTag = ['DIV', 'P', 'SPAN', 'B'];
+/**
+ * this.state = {
+            markedArr: [],
+            originTarget: '',
+            target: '',
+            start: '',
+            end: '',
+            anchorNode: '',
+            extentNode: '',
+            anchorOffset: '',
+            extentOffset: ''
+        }
+ */
+let markingTag = 'B';
+let consideredTag = ['DIV', 'P', 'SPAN', markingTag];
+const initTag = (tag = markingTag, tagArr) => {
+    markingTag = tag;
+    consideredTag = tagArr ? consideredTag : [...tagArr, markingTag];
+}
 const getInnerHTMLByNode = (node) => {
     if (node.nodeType === 1) {
         return node.outerHTML;
@@ -23,10 +41,10 @@ const changeNodeValueByMark = (node, mark, parentElement) => {
         let data = node.data;
         let len = data.length;
         if (consideredTag.includes(parentElement.nodeName)) {
-            if (mark.start >= len) {
+            if (mark.start > len) {
                 mark.start -= len;
                 mark.end -= len;
-            } else if (mark.end > 0) {
+            } else if (mark.end >= 0 && parentElement.nodeName !== markingTag) {
                 let text;
                 const { start, end } = mark;
                 if (mark.end < len) {
@@ -34,8 +52,8 @@ const changeNodeValueByMark = (node, mark, parentElement) => {
                     mark.end = -1;
                 } else {
                     text = data.slice(0, start) + '<b>' + data.slice(start) + '</b>';
-                    mark.start = 1;
-                    mark.end = end - len + 1;
+                    mark.start = 0;
+                    mark.end = end - len;
                 }
                 parentElement.innerHTML = [...parentElement.childNodes].reduce((p, child) => {
                     if (child === node) {
@@ -68,7 +86,10 @@ const getSelected = (node, mark, anchorNode, extentNode, add, parentElement) => 
         }
     }
 }
-const addMark = function (intervals, newInterval) { // 插入区间
+
+const _Mark = {};
+
+_Mark.addMark = function (intervals, newInterval) { // 插入区间
     if (!intervals.length) {
         return [newInterval];
     }
@@ -104,7 +125,7 @@ const addMark = function (intervals, newInterval) { // 插入区间
     return intervals;
 }
 
-const removeMark = (markedArr, mark) => {
+_Mark.removeMark = (markedArr, mark) => {
     if (!markedArr.length || !mark) {
         return markedArr;
     }
@@ -129,9 +150,103 @@ const removeMark = (markedArr, mark) => {
     })
 }
 
+const getStartAndEnd = (target, { anchorNode, extentNode, anchorOffset, extentOffset }) => {
+    let nodes = target.childNodes;
+    let exchange;
+    if (anchorNode !== extentNode) {
+        const searchForStartNode = function (nodes) {
+            nodes = [...nodes];
+            nodes.some((node) => {
+                if (node.nodeType === 1) {
+                    return searchForStartNode(node.childNodes);
+                }
+                if (node === anchorNode) {
+                    if (typeof exchange === 'undefined') {
+                        exchange = false;
+                    }
+                    return true;
+                } else if (node === extentNode) {
+                    if (typeof exchange === 'undefined') {
+                        exchange = true;
+                    }
+                    return true;
+                }
+                return false;
+            })
+        }
+        searchForStartNode(nodes);
+    } else if (anchorOffset > extentOffset) {
+        exchange = true;
+    }
+    if (exchange) {
+        [anchorOffset, extentOffset] = [extentOffset, anchorOffset];
+        [anchorNode, extentNode] = [extentNode, anchorNode];
+    }
+    return {
+        anchorNode,
+        extentNode,
+        anchorOffset,
+        extentOffset
+    }
+}
+
+const handleSelect = function (e) {
+    let selection = window.getSelection();
+    let target = e.currentTarget;
+    let { anchorNode, extentNode, anchorOffset, extentOffset } = getStartAndEnd(target, selection);
+    let originTarget = document.createElement(target.nodeName);
+    originTarget.innerHTML = target.innerHTML;
+    this.setState({
+        target,
+        originTarget: this.state.originTarget || originTarget,
+        anchorNode,
+        extentNode,
+        anchorOffset,
+        extentOffset
+    });
+}
+
+const markSelected = function () {
+    let { target, anchorOffset, extentOffset, anchorNode, extentNode } = this.state;
+    let start = anchorOffset, end = extentOffset;
+    let mark = { start, end };
+    getSelected(target, mark, anchorNode, extentNode, { start: true, end: true });
+    return mark;
+}
+
+const renderByMarked = function (markedArr) {
+    let { originTarget } = this.state;
+    let template = document.createElement(originTarget.nodeName);
+    template.innerHTML = originTarget.innerHTML;
+    return markedArr.reduce((p, mark) => {
+        changeNodeValueByMark(p, JSON.parse(JSON.stringify(mark)));
+        return p;
+    }, template).innerHTML;
+}
+const marking = function (behavior) {
+    let { target, markedArr } = this.state;
+    if (!target) {
+        return;
+    }
+    markedArr = _Mark[behavior](markedArr, markSelected.call(this));
+    target.innerHTML = renderByMarked.call(this, markedArr);
+    this.setState({
+        markedArr,
+        target: null
+    })
+}
+
+const addMark = function () {
+    marking.call(this, 'addMark');
+}
+
+const removeMark = function () {
+    marking.call(this, 'removeMark');
+}
+
 export default {
+    initTag,
+    handleSelect,
     addMark,
-    removeMark,
-    getSelected,
-    changeNodeValueByMark,
+    removeMark
 };
