@@ -3,8 +3,6 @@
             markedArr: [],
             originTarget: '',
             target: '',
-            start: '',
-            end: '',
             anchorNode: '',
             extentNode: '',
             anchorOffset: '',
@@ -12,10 +10,13 @@
         }
  */
 let markingTag = 'B';
-let consideredTag = ['DIV', 'P', 'SPAN', markingTag];
-const initTag = (tag = markingTag, tagArr) => {
+let markableTags = ['DIV', 'P', 'SPAN', markingTag];
+const initTag = (tag = markingTag, tagArr) => { // params: tag use to mark ; tagArr: record of markable tags
     markingTag = tag;
-    consideredTag = tagArr ? consideredTag : [...tagArr, markingTag];
+    if (tagArr) {
+        tagArr = tagArr.map(t => t.toLocaleUpperCase());
+        markableTags = [...tagArr, markingTag];
+    }
 }
 const getInnerHTMLByNode = (node) => {
     if (node.nodeType === 1) {
@@ -28,7 +29,7 @@ const getTextLengthByNode = (node, parentElement) => {
     if (node.nodeType === 1) {
         return [...node.childNodes].reduce((p, n) => p + getTextLengthByNode(n, node), 0);
     } else if (node.nodeType === 3) {
-        if (!parentElement || consideredTag.includes(parentElement.nodeName)) {
+        if (parentElement && markableTags.includes(parentElement.nodeName)) {
             return node.length;
         }
     }
@@ -40,7 +41,7 @@ const changeNodeValueByMark = (node, mark, parentElement) => {
     } else if (node.nodeType === 3) {
         let data = node.data;
         let len = data.length;
-        if (consideredTag.includes(parentElement.nodeName)) {
+        if (markableTags.includes(parentElement.nodeName)) {
             if (mark.start > len) {
                 mark.start -= len;
                 mark.end -= len;
@@ -192,6 +193,12 @@ const getStartAndEnd = (target, { anchorNode, extentNode, anchorOffset, extentOf
 
 const handleSelect = function (e) {
     let selection = window.getSelection();
+    if (selection.type === 'Caret') {
+        this.setState({
+            target: null
+        });
+        return;
+    }
     let target = e.currentTarget;
     let { anchorNode, extentNode, anchorOffset, extentOffset } = getStartAndEnd(target, selection);
     let originTarget = document.createElement(target.nodeName);

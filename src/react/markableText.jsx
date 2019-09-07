@@ -9,8 +9,8 @@ class MarkableText extends React.Component {
             markedArr: [],
             originTarget: '',
             target: '',
-            start: '',
-            end: '',
+            // start: '',
+            // end: '',
             anchorNode: '',
             extentNode: '',
             anchorOffset: '',
@@ -32,7 +32,7 @@ class MarkableText extends React.Component {
                     <div>
                         666425234
                     <button style={{userSelect: 'none'}}>66666666666</button>
-                    <button style={{userSelect: 'none'}}>452345</button>
+                    <button>452345</button>
                     </div>
                     871787
                     {text}
