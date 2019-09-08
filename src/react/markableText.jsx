@@ -1,11 +1,40 @@
 import React from 'react';
 import Mark from './mark'
 
+const setState = function (obj) {
+    Object.assign(this.state, obj);
+}
 class MarkableText extends React.Component {
     constructor() {
         super();
         this.state = {
             inputVal: '',
+            section1: {
+                state: {
+                    markedArr: [],
+                    originTarget: '',
+                    target: '',
+                    anchorNode: '',
+                    extentNode: '',
+                    anchorOffset: '',
+                    extentOffset: '',
+                    markable: false
+                },
+                setState
+            },
+            section2: {
+                state: {
+                    markedArr: [],
+                    originTarget: '',
+                    target: '',
+                    anchorNode: '',
+                    extentNode: '',
+                    anchorOffset: '',
+                    extentOffset: '',
+                    markable: false
+                },
+                setState
+            },
             markedArr: [],
             originTarget: '',
             target: '',
@@ -14,44 +43,68 @@ class MarkableText extends React.Component {
             anchorNode: '',
             extentNode: '',
             anchorOffset: '',
-            extentOffset: ''
+            extentOffset: '',
+            markable: false
         }
     }
     render() {
         const { text } = this.props;
         return (
             <>
-                <button onClick={this.addMark} value={this.state.inputVal}>标记</button>
-                <button onClick={this.removeMark}>取消标记</button>
-                {/* <input onInput={this.handleInput}></input> */}
-                <div onMouseUp={this.handleSelect}>
+                {/* section1 */}
+                <div onMouseUp={this.handleSelect.bind(this.state.section1)}>section1{text}</div>
+                <button onClick={this.addMark.bind(this.state.section1)} value={this.state.inputVal}>标记</button>
+                <button onClick={this.removeMark.bind(this.state.section1)}>取消标记</button>
+
+                {/* section2 */}
+                <button onClick={this.addMark.bind(this.state.section2)} value={this.state.inputVal}>标记</button>
+                <button onClick={this.removeMark.bind(this.state.section2)}>取消标记</button>
+                <div onMouseUp={this.handleSelect.bind(this.state.section2)}>
+                    section2
                     <p>
-                        {/* {this.state.inputVal} */}
                         {text}
                     </p>
                     <div>
                         666425234
-                    <button style={{userSelect: 'none'}}>66666666666</button>
-                    <button>452345</button>
+                    <button style={{ userSelect: 'none' }}>66666666666</button>
+                        <button>452345</button>
                     </div>
                     871787
                     {text}
                 </div>
+
+                {/* section3 */}
+                <h3>{this.state.inputVal}</h3>
+                <input onInput={this.handleInput}></input>
+                <div onMouseUp={this.handleSelect.bind(this)}>
+                    section3
+                    {text}
+                    <div>
+                        <p>asfsadf</p>
+                    </div>
+                    <p>dsafasdfasdf</p>
+                    <span>5555</span>
+                </div>
+                <button onClick={this.addMark.bind(this)} value={this.state.inputVal}>标记</button>
+                <button onClick={this.removeMark.bind(this)}>取消标记</button>
             </>
         )
     };
+    componentDidMount() {
+        // Mark.initTag('chuqi', ['span', 'p', 'div']);
+    }
     handleInput = e => {
         this.setState({
             inputVal: e.target.value
         })
     }
-    handleSelect = e => {
+    handleSelect(e) {
         Mark.handleSelect.call(this, e);
     }
-    addMark = () => {
+    addMark() {
         Mark.addMark.call(this);
     }
-    removeMark = () => {
+    removeMark() {
         Mark.removeMark.call(this);
     }
 }
