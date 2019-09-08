@@ -7,7 +7,8 @@
             anchorNode: '',
             extentNode: '',
             anchorOffset: '',
-            extentOffset: ''
+            extentOffset: '',
+            markable: false
         }
     一个组件多段使用（more targets)
     this.state = {
@@ -19,7 +20,8 @@
                 anchorNode: '',
                 extentNode: '',
                 anchorOffset: '',
-                extentOffset: ''
+                extentOffset: '',
+                markable: false
             },
             setState: function (obj) {
                 Object.assign(this.state, obj);
@@ -33,7 +35,8 @@
                 anchorNode: '',
                 extentNode: '',
                 anchorOffset: '',
-                extentOffset: ''
+                extentOffset: '',
+                markable: false
             },
             setState: function (obj) {
                 Object.assign(this.state, obj);
