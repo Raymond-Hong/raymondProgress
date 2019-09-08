@@ -47,6 +47,7 @@
 
 let markingTag = 'LARP';
 let markableTags = ['DIV', 'P', 'SPAN', markingTag];
+let removeAllMarks = false;
 
 const initTag = (tag = markingTag, tagArr = []) => { // params: tag use to mark ; tagArr: record of markable tags
     markingTag = tag.toUpperCase();
@@ -193,50 +194,29 @@ _Mark.removeMark = (markedArr, mark) => {
     })
 }
 
-const verifyCrossingTarget = (target, anchorNode, extentNode) => {
-    let crossingTarget = 2;
-    const searchNode = (nodes) => {
-        nodes.forEach(node => {
-            if (node.nodeType === 1) {
-                searchNode(node.childNodes)
-            } else {
-                if (node === anchorNode || node === extentNode) {
-                    crossingTarget--;
-                }
-            }
-        })
-    }
-    searchNode(target.childNodes);
-    return crossingTarget;
-}
-
 const verifyStartAndEndNode = (target, { anchorNode, extentNode, anchorOffset, extentOffset }) => {
-    let nodes = target.childNodes;
     let exchange;
-    let crossingTarget = verifyCrossingTarget(target, anchorNode, extentNode);
+    let crossingTarget = 2;
+    const searchForStartNode = (nodes) => {
+        nodes.forEach((node) => {
+            if (node.nodeType === 1) {
+                searchForStartNode(node.childNodes);
+            }else if (node === anchorNode) {
+                if (typeof exchange === 'undefined') {
+                    exchange = false;
+                }
+                crossingTarget--;
+            } else if (node === extentNode) {
+                if (typeof exchange === 'undefined') {
+                    exchange = true;
+                }
+                crossingTarget--;
+            }
+        });
+    }
+    searchForStartNode(target.childNodes);
     if (anchorNode !== extentNode) {
         crossingTarget = !!crossingTarget;
-        const searchForStartNode = function (nodes) {
-            nodes = [...nodes];
-            nodes.some((node) => {
-                if (node.nodeType === 1) {
-                    return searchForStartNode(node.childNodes);
-                }
-                if (node === anchorNode) {
-                    if (typeof exchange === 'undefined') {
-                        exchange = false;
-                    }
-                    return true;
-                } else if (node === extentNode) {
-                    if (typeof exchange === 'undefined') {
-                        exchange = true;
-                    }
-                    return true;
-                }
-                return false;
-            })
-        }
-        crossingTarget || searchForStartNode(nodes);
     } else {
         crossingTarget = !crossingTarget;
         if (anchorOffset > extentOffset) {
@@ -298,14 +278,19 @@ const renderByMarked = function (markedArr) {
 
 const marking = function (behavior) {
     let { markable, target, markedArr } = this.state;
-    if (markable) {
+    if (removeAllMarks) {
+        removeAllMarks = false;
+        markedArr = [];
+    } else if (markable) {
         markedArr = _Mark[behavior](markedArr, markSelected.call(this));
-        target.innerHTML = renderByMarked.call(this, markedArr);
-        this.setState({
-            markedArr,
-            markable: false
-        })
+    } else {
+        return;
     }
+    target.innerHTML = renderByMarked.call(this, markedArr);
+    this.setState({
+        markedArr,
+        markable: false
+    })
 }
 
 const addMark = function () {
@@ -316,11 +301,17 @@ const removeMark = function () {
     marking.call(this, 'removeMark');
 }
 
+const clearAllMarks = function () {
+    removeAllMarks = true;
+    removeMark.call(this);
+}
+
 export default {
     initTag,
     handleSelect,
     addMark,
     removeMark,
+    clearAllMarks,
     state: {
         markedArr: [],
         originTarget: '',
