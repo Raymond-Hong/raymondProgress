@@ -41,13 +41,16 @@
         }
     }
  */
+
 let markingTag = 'LARP';
 let markableTags = ['DIV', 'P', 'SPAN', markingTag];
+
 const initTag = (tag = markingTag, tagArr = []) => { // params: tag use to mark ; tagArr: record of markable tags
     markingTag = tag.toUpperCase();
     tagArr = tagArr.map(t => t.toUpperCase());
     markableTags = [...tagArr, markingTag];
 }
+
 const getHTMLByNode = (node) => {
     if (node.nodeType === 1) {
         return node.outerHTML;
@@ -55,6 +58,7 @@ const getHTMLByNode = (node) => {
         return node.data;
     }
 }
+
 const getTextLengthByNode = (node, parentElement) => {
     if (node.nodeType === 1) {
         return [...node.childNodes].reduce((p, n) => p + getTextLengthByNode(n, node), 0);
@@ -65,6 +69,7 @@ const getTextLengthByNode = (node, parentElement) => {
     }
     return 0;
 }
+
 const changeNodeValueByMark = (node, mark, parentElement) => {
     if (node.nodeType === 1) {
         node.childNodes.forEach(el => changeNodeValueByMark(el, mark, node));
@@ -97,6 +102,7 @@ const changeNodeValueByMark = (node, mark, parentElement) => {
         }
     }
 }
+
 const getSelected = (node, mark, anchorNode, extentNode, add, parentElement) => {
     if (node.nodeType === 1) {
         node.childNodes.forEach(child => getSelected(child, mark, anchorNode, extentNode, add, node));
@@ -120,40 +126,43 @@ const getSelected = (node, mark, anchorNode, extentNode, add, parentElement) => 
 
 const _Mark = {};
 
-_Mark.addMark = function (intervals, newInterval) { // 插入区间
-    if (!intervals.length) {
-        return [newInterval];
+_Mark.addMark = function (markedArr, mark) { // 插入区间
+    if (!markedArr.length) {
+        return [mark];
     }
-    intervals.reduce((p, vals, k) => {
+    markedArr.reduce((p, m, i) => {
+        let { start, end } = m;
         if (typeof p !== 'number') {
-            if (newInterval.end < vals.start) {
-                intervals.unshift(newInterval);
+            if (mark.end < start) {
+                markedArr.unshift(mark);
             }
-            if (vals.start > newInterval.start && newInterval.end >= vals.start) {
-                vals.start = newInterval.start;
+            if (start > mark.start && mark.end >= start) {
+                start = mark.start;
             }
-            if (vals.end >= newInterval.start) {
-                vals.end = newInterval.end > vals.end ? newInterval.end : vals.end;
+            if (end >= mark.start) {
+                end = mark.end > end ? mark.end : end;
             }
         } else {
-            if (p >= newInterval.start && newInterval.end >= vals.start) {
-                intervals[k - 1].end = vals.end > newInterval.end ? vals.end : newInterval.end;
-                intervals.splice(k, 1);
+            if (p >= mark.start && mark.end >= start) {
+                markedArr[i - 1].end = end > mark.end ? end : mark.end;
+                markedArr.splice(i, 1);
             }
-            if (p <= newInterval.start && newInterval.end >= vals.start && newInterval.start <= vals.end) {
-                vals.start = newInterval.start > vals.start ? vals.start : newInterval.start;
-                vals.end = newInterval.end > vals.end ? newInterval.end : vals.end;
+            if (p <= mark.start && mark.end >= start && mark.start <= end) {
+                start = mark.start > start ? start : mark.start;
+                end = mark.end > end ? mark.end : end;
             }
-            if (p < newInterval.start && newInterval.end < vals.start) {
-                intervals.splice(k, 0, newInterval);
+            if (p < mark.start && mark.end < start) {
+                markedArr.splice(i, 0, mark);
             }
         }
-        if (k === intervals.length - 1 && newInterval.start > vals.end) {
-            intervals.push(newInterval);
+        if (i === markedArr.length - 1 && mark.start > end) {
+            markedArr.push(mark);
         }
-        return vals.end;
+        m.start = start;
+        m.end = end;
+        return end;
     }, null);
-    return intervals;
+    return markedArr;
 }
 
 _Mark.removeMark = (markedArr, mark) => {
@@ -180,6 +189,7 @@ _Mark.removeMark = (markedArr, mark) => {
         return { start, end };
     })
 }
+
 const verifyCrossingTarget = (target, anchorNode, extentNode) => {
     let crossingTarget = 2;
     const searchNode = (nodes) => {
@@ -196,6 +206,7 @@ const verifyCrossingTarget = (target, anchorNode, extentNode) => {
     searchNode(target.childNodes);
     return crossingTarget;
 }
+
 const verifyStartAndEndNode = (target, { anchorNode, extentNode, anchorOffset, extentOffset }) => {
     let nodes = target.childNodes;
     let exchange;
@@ -281,6 +292,7 @@ const renderByMarked = function (markedArr) {
         return p;
     }, template).innerHTML;
 }
+
 const marking = function (behavior) {
     let { markable, target, markedArr } = this.state;
     if (markable) {
