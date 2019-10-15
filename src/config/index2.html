@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Search</title>
+</head>
+<style>
+    #root{
+        padding-top: 100px;
+    }
+    ::selection {
+        background-color: #f40;
+    }
+    larp,
+    markbutton,
+    unmarkbutton {
+        display: inline;
+        position: relative;
+    }
+    larp {
+        color: #f40;
+    }
+
+    chu7{
+        background-color: yellow;
+    }
+
+    markbutton::before {
+        position: absolute;
+        content: '标注';
+        color: lawngreen;
+        top: -30px;
+        left: 0;
+        font-size: 20px;
+        pointer-events: all;
+        background-color: bisque;
+        word-break: keep-all;
+        text-indent: 0;
+        border-radius: 5px;
+        height: 30px;
+        line-height: 30px;
+        user-select: none;
+        cursor: pointer;
+    }
+
+    unmarkbutton::before {
+        position: absolute;
+        content: '取消标注';
+        color: pink;
+        top: -30px;
+        left: 42px;
+        font-size: 20px;
+        pointer-events: auto;
+        background-color: wheat;
+        word-break: keep-all;
+        text-indent: 0;
+        border-radius: 5px;
+        height: 30px;
+        line-height: 30px;
+        user-select: none;
+        cursor: pointer;
+    }
+</style>
+<script src="./index2.js"></script>
+
+<body>
+    <input type="text" id="inputVal" oninput="search(event)" style="z-Index: 99;position:fixed; width: 60%; height: 40px; padding: 5px; top:5px">
+    <button style="position:fixed; z-Index: 99; width: 50px; height: 40px; top: 60px;" onclick="searchedPre()">↑</button>
+    <button style="position:fixed; z-Index: 99; width: 50px; height: 40px; top: 60px; left: 60px;" onclick="searchedNext()">↓</button>
+    <div id='root'>
+    <!-- <div id=root> -->
+        <u>陶阳</u></strong>
+            偶遇你俩在路
+            <div id='abc'>
+                hehehhheeeheheheh
+            </div>
+            <span style="color: black;">外出做生意，
+            边乞讨，好心的他把你们带了回来，养在寨子里。小七把他刻着“齐”字的银质长命锁送给你，和你结拜为兄弟。你没有东西送给他，承诺等你长大
+            赚了钱，一定送他一份回礼。然而小七没有等到那一天。</span></p>
+        <p><span style="color: black;">有一天你和小七去树林玩迷了路，来到一片从没去
+                过的树林。你们看到一大片红得发紫的蛇泡，又饿又渴的你们向蛇泡冲去。突然你后背被砸中，摔了一跤，一个中年男人的声音传来：“小孩，那蛇泡是蛇灵的食物，
+                吃不得呀。”你爬起来，回头望去，只见不远处的铁窗里关着一个蓬头垢面的中年男人。你吓了一跳，拔腿就跑。你想起听寨子里的老人说过，蛇是苗家的圣物，
+                差王（即专门养蛇蛊的神婆，在蛊苗地位极高）养蛇蛊，蛇的食物是不能碰的。你连忙上前阻止小七，但为时已晚，他已经吃下了好几颗。</span></p>
+        <p>
+            <larp>找来了差王，差王生气的带走了小七
+            </larp>
+            苗王外出未归，人们，你听寨子里的人说小七吃了蛇灵的食物，活不了了。从那之后你再也没见过小七，每每想
+            念他时你就会拿出那个长命锁，就像看到他一
+    </div>
+    <script>
+
+        function clickBefore(e) {
+        }
+        let root = document.getElementById('root');
+        function ex() {
+            let content = `说：你俩都是孤儿，苗王</span><strong style="color: black;"><u>陶阳</u></strong><span style="color: black;">外出做生意，
+            偶遇你俩在路边乞讨，好心的他把你们带了回来，养在寨子里。小七把他刻着“齐”字的银质长命锁送给你，和你结拜为兄弟。你没有东西送给他，承诺等你长大
+            赚了钱，一定送他一份回礼。然而小七没有等到那一天。</span></p>
+        <p><span style="color: black;">有一天你和小七去树林玩迷了路，来到一片从没去
+                过的树林。你们看到一大片红得发紫的蛇泡，又饿又渴的你们向蛇泡冲去。突然你后背被砸中，摔了一跤，一个中年男人的声音传来：“小孩，那蛇泡是蛇灵的食物，
+                吃不得呀。”你爬起来，回头望去，只见不远处的铁窗里关着一个蓬头垢面的中年男人。你吓了一跳，拔腿就跑。你想起听寨子里的老人说过，蛇是苗家的圣物，
+                差王（即专门养蛇蛊的神婆，在蛊苗地位极高）养蛇蛊，蛇的食物是不能碰的。你连忙上前阻止小七，但为时已晚，他已经吃下了好几颗。</span></p>
+        <p>
+            <larp style="color: #f40;display: inline;position: relative;" onclick="clickBefore(event)">找来了差王，差王生气的带走了小七
+            </larp>
+            苗王外出未归，人们，你听寨子里的人说小七吃了蛇灵的食物，活不了了。从那之后你再也没见过小七，每每想
+            念他时你就会拿出那个长命锁，就像看到他一`;
+            root.innerHTML += content.repeat(20);
+            root.innerHTML += `<div id='acd'></div>啦啦啦啦啦aaaaaaaaaaaaaaaaaaaaaaaaaaaa啦啦啦啦啦啦`;
+            root.innerHTML += content.repeat(20);
+            root.innerHTML += `<div id='bcd'>啦啦啦啦啦bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb啦啦啦啦</div>`;
+            root.innerHTML += content.repeat(20);
+            root.innerHTML += `<div id='ccd'>啦啦啦啦啦啦ccccccccccccccccccccccccccccccccccccc啦啦</div>`;
+            root.innerHTML += content.repeat(20);
+            root.innerHTML += `<div id='dcd'>啦啦啦啦啦dddddddddddddddddddddddddddddddddddddddd啦啦啦</div>`;
+            root.innerHTML += content.repeat(20);
+            root.innerHTML += `<div id='dcd'>啦啦啦啦啦eeeeeeeeeeeeeeeeeeeeeeeeeddeeeeeeee啦啦啦</div>`;
+            root.innerHTML += content.repeat(20);
+            root.innerHTML += `<div id='dcd'>啦啦啦啦啦ffffffffffffffffffffffffffffffffd啦啦啦</div>`;
+            root.innerHTML += content.repeat(20);
+            root.innerHTML += `<div id='dcd'>啦啦啦啦啦ggggggggggggggggggggggggggggggggggg啦啦啦</div>`;
+        }
+        ex();
+        // initRealDom();
+        let realDom = root;
+        let val,/* timer,  */totalSearched = [], currentIndex = 0;
+        const scroll = (e)=>{
+            getSearchedAndSelectOne(val,undefined,totalSearched);
+            // clearTimeout(timer);
+            // timer = setTimeout(()=>{
+            //     getSearchedAndSelectOne(val,undefined,totalSearched);
+            // }, 800);
+        }
+        const searchedPre = () => {
+            --currentIndex;
+            let len = totalSearched.length;
+            if (currentIndex === len) {
+                currentIndex = 0;
+            } else if (currentIndex < 0) {
+                currentIndex = len - 1;
+            }
+            getSearchedAndSelectOne(val, currentIndex);
+        }
+        
+        const searchedNext = () => {
+            ++currentIndex;
+            let len = totalSearched.length;
+            if (currentIndex === len) {
+                currentIndex = 0;
+            } else if (currentIndex < 0) {
+                currentIndex = len - 1;
+            }
+            getSearchedAndSelectOne(val, currentIndex);
+        }
+        window.addEventListener('scroll', scroll);
+        const search = e => {
+            clearTimeout(e.target.timer);
+            val = e.target.value;
+            e.target.timer = setTimeout(()=>{
+                let result = getSearchedAndSelectOne(val);
+                totalSearched = result.totalSearched;
+                currentIndex = result.currentSearchedIndex;
+            }, 1000);
+        }
+
+        let larp = document.getElementsByTagName('larp')[0];
+        let bcd = document.getElementById('abc');
+        document.onselectionchange = (e)=>{
+            e.preventDefault();
+            // console.log(e, 173, 173);
+            // if (addMarkButton.parentElement) {
+            //     return;
+            // }
+            addButtonForAddAndRemove(e);
+        }
+        /**
+         * /
+         * 
+         *  */
+        
+        let arr = [];
+
+    </script>
+</body>
+
+</html>

@@ -435,7 +435,6 @@ const usingRAF = (function () {
   return function (fn, obj, delay = 0) {
       if (typeof fn != 'function' || typeof obj != 'object' || typeof obj.stop != 'boolean') {
           throw ('missing parameter');
-          return;
       }
       rafId = window.requestAnimationFrame(passValue);
       return passValue;
