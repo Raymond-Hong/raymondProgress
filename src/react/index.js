@@ -12,10 +12,17 @@ let allText;
 let allTextNode = [];
 let totalSearched = [];
 let remarkSelection;
+let timer;
+let waitTimer = false;
 
 
-const removeMarkedTagBySelection = ({ anchorNode, extentNode, anchorOffset, extentOffset }, realDom, markedTag, add) => { // 已在selection前加了markbutton/unmarkbutton的情况
-    const mark = getStartAndEndBySelection({ anchorNode, extentNode, anchorOffset, extentOffset }, realDom);
+const removeMarkedTagBySelection = (selection, realDom, markedTag, add) => { // 已在selection前加了markbutton/unmarkbutton的情况
+    const mark = getStartAndEndBySelection(selection, realDom);
+    if (!add) {
+        jointTextNode();
+        selection = getNodeByStartAndEnd(realDom, mark);
+    }
+    const { anchorNode, extentNode, anchorOffset, extentOffset } = selection;
     markedArr = removeMark(markedArr, mark);
     if (anchorNode === extentNode) {
         let top = anchorNode.parentElement.parentElement, p = anchorNode.parentElement;
@@ -208,8 +215,11 @@ const removeMarkedTagBySelection = ({ anchorNode, extentNode, anchorOffset, exte
 }
 
 
-const addMarkedTagBySelection = ({ anchorNode, extentNode, anchorOffset, extentOffset }, realDom, markedTag) => { // 已在selection前加了markbutton/unmarkbutton的情况
-    const mark = getStartAndEndBySelection({ anchorNode, extentNode, anchorOffset, extentOffset }, realDom);
+const addMarkedTagBySelection = (selection, realDom, markedTag) => { // 已在selection前加了markbutton/unmarkbutton的情况
+    const mark = getStartAndEndBySelection(selection, realDom);
+    jointTextNode();
+    selection = getNodeByStartAndEnd(realDom, mark);
+    const { anchorNode, extentNode, anchorOffset, extentOffset } = selection;
     markedArr = addMark(markedArr, mark);
     if (anchorNode === extentNode) {
         let parentElement = anchorNode.parentElement;
@@ -427,42 +437,40 @@ const addButtonBeforeSelection = ({ anchorNode, anchorOffset, extentNode, extent
 }
 
 const setTextToSelection = ({ anchorNode, extentNode, anchorOffset, extentOffset }) => {
-    let range = document.createRange();
-    range.setStart(anchorNode, anchorOffset);
-    range.setEnd(extentNode, extentOffset);
-    let selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
+    try {
+        let range = document.createRange();
+        range.setStart(anchorNode, anchorOffset);
+        range.setEnd(extentNode, extentOffset);
+        let selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+    } catch (error) {
+        waitTimer = false;
+    }
 }
 
-const removeSelect = function () {
+const handleSelect = handle => {
+    if (waitTimer) return;
     let selection = window.getSelection();
     // let selection = { ...remarkSelection };
     if (selection.type !== 'Range') {
         return;
     }
-    selection = {
-        ...selection,
-        ...sortAnchorNodeAndExtentNode(selection, root)
-    }
-    removeMarkedTagBySelection(selection, root, tagForMark);
-    addButtonForAddAndRemove();
-    jointTextNode();
-}
-
-const addSelect = function () {
-    let selection = window.getSelection();
-    // let selection = { ...remarkSelection };
-    if (selection.type !== 'Range') {
-        return;
-    }
-    let s = sortAnchorNodeAndExtentNode(selection, root)
+    let s = sortAnchorNodeAndExtentNode(selection, root);
     s = {
         ...s,
         ...selection,
     }
-    addMarkedTagBySelection(s, root, tagForMark);
+    handle(s, root, tagForMark);
     addButtonForAddAndRemove();
+}
+
+const removeSelect = function () {
+    handleSelect(removeMarkedTagBySelection);
+}
+
+const addSelect = function () {
+    handleSelect(addMarkedTagBySelection);
 }
 
 addMarkButton.onmousedown = addSelect;
@@ -475,7 +483,7 @@ const addButtonForAddAndRemove = e => {
     let s = {};
     let selection = window.getSelection();
     s.type = selection.type;
-    s = { ...s, ...sortAnchorNodeAndExtentNode(selection, root) };
+    s = { ...s, ...selection, ...sortAnchorNodeAndExtentNode(selection, root) };
     if (s.type !== 'Range') {
         if (addMarkButton.parentElement) {
             addMarkButton.parentElement.removeChild(addMarkButton);
@@ -504,6 +512,26 @@ const addButtonForAddAndRemove = e => {
     } else if (addMarkButton.parentElement &&
         s.anchorNode === remarkSelection.anchorNode &&
         s.anchorOffset === 0) {
+        remarkSelection = s;
+        return;
+    } else if (addMarkButton.parentElement &&
+        s.extentNode === remarkSelection.extentNode &&
+        s.extentOffset === remarkSelection.extentOffset) {
+        remarkSelection = s;
+        clearTimeout(timer);
+        waitTimer = true;
+        timer = setTimeout(() => {
+            s = {
+                ...s,
+                ...addButtonBeforeSelection(s, addMarkButton, removeMarkButton)
+            }
+            remarkSelection = s;
+            setTextToSelection(s);
+            waitTimer = false;
+        }, 500);
+        return;
+    }
+    if (s.anchorNode === s.extentNode && s.extentOffset === s.anchorOffset) {
         return;
     }
     s = {
