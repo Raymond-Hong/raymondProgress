@@ -954,6 +954,9 @@ const getStartAndEndBySelection = ({ anchorNode, extentNode, anchorOffset, exten
     let start = 0, end = 0, startStop = false, endStop = false;
     const traverseDom = (dom) => {
         if (dom.nodeType === 1) {
+            if (dom === extentNode) {
+                endStop = true;
+            }
             dom.childNodes.forEach(node => traverseDom(node));
         } else if (dom.nodeType === 3) {
             if (dom === anchorNode) {
