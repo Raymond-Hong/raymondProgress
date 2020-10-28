@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Drag</title>
     <style>
         *{
             margin: 0;
@@ -17,6 +17,8 @@
             background-color: bisque;
             cursor: pointer;
             position: absolute;
+            border-radius: 50%;
+            box-shadow: 10px 5px 5px pink;
         }
     </style>
 </head>
@@ -28,17 +30,17 @@
     function drag(elem) {
         var disX,
             disY;
-            addEvent(elem, 'mousedown', function (e) {
+            addEvent(elem, 'touchstart', function (e) {
             var event = e || window.event;
             disX = event.clientX - parseInt(getStyle(elem,'left'));
             disY = event.clientY - parseInt(getStyle(elem,'top'));
-            document.onmousemove = function (e) {
+            document.ontouchmove = function (e) {
                 var event = e || window.event;
                 elem.style.left = event.clientX - disX + 'px';
                 elem.style.top = event.clientY - disY + 'px';
             };
-            addEvent(document, 'mouseup', function () {
-                document.onmousemove = null;
+            addEvent(document, 'touchend', function () {
+                document.ontouchmove = null;
             });
         });
     }

@@ -110,13 +110,20 @@
             position: absolute;
             width: 400px;
             height: 200px;
-            color: #dee;
+            color: #ffd;
             left: 50%;
             margin-left: -200px;
         }
 
         .wrapper .header span {
             font-size: 50px;
+        }
+
+        canvas {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: -1;
         }
     </style>
 </head>
@@ -839,7 +846,40 @@
             <button class="pickWhite">电脑执白</button>
         </div>
     </div>
+    <canvas width="3000" height="3000"></canvas>
     <script>
+        //  点触效果
+        (function () {
+            document.getElementsByTagName('html')[0].onclick = function (e) {
+                draw(e.pageX, e.pageY);
+            }
+            const canvas = document.getElementsByTagName('canvas')[0];
+            const ctx = canvas.getContext("2d");
+            let timer;
+            function draw(x, y) {
+                timer && clearInterval(timer);
+                const a = Math.ceil(255 * Math.random());
+                const b = Math.ceil(255 * Math.random());
+                const c = Math.ceil(255 * Math.random());
+                ctx.fillStyle = `rgb(${a}, ${b}, ${c})`;
+                let time = 0;
+                const MaxT = 1000;
+                const interval = 20;
+                timer = setInterval(() => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    time += interval;
+                    ctx.globalAlpha = 1 - time / MaxT;
+                    if (time > MaxT) {
+                        clearInterval(timer);
+                        return;
+                    }
+                    ctx.beginPath();
+                    ctx.arc(x, y--, 20 - 8 * time / MaxT, 0, 2 * Math.PI);
+                    ctx.fill();
+                }, interval);
+            }
+        })();
+        //
         var chessArr = [].slice.call(document.getElementsByClassName('chesspiece'), 0);
         var blackArr = [];
         var whiteArr = [];
@@ -982,7 +1022,7 @@
                     return linkArr.length == game.five;
                 }
                 return {
-                    linkArr: linkArr.length&&linkArr||linkArr.concat(this),
+                    linkArr: linkArr.length && linkArr || linkArr.concat(this),
                     inlineArr: inlineArr
                 };
             }
@@ -1124,7 +1164,7 @@
                 return arr[num];
             }
         }
-        function getIndexObj(i, obj, existArr,resultArr) {
+        function getIndexObj(i, obj, existArr, resultArr) {
             if (obj) {
                 return obj;
             }
@@ -1143,16 +1183,16 @@
         }
         function hasOtherChessLink(arr, prop) {
             arr = [].concat(arr);
-            var before = arr[0], 
-                beforeIndex, 
-                len = arr.length, 
-                after = arr[0], 
-                afterIndex, result = { result: 0,bfEmpty:'',afEmpty:'',before:0,after:0 };
+            var before = arr[0],
+                beforeIndex,
+                len = arr.length,
+                after = arr[0],
+                afterIndex, result = { result: 0, bfEmpty: '', afEmpty: '', before: 0, after: 0 };
             for (var i = 1; i < len; i++) {
-                if (arr[i]&&before.disIndex > arr[i].disIndex) {
+                if (arr[i] && before.disIndex > arr[i].disIndex) {
                     before = arr[i];
                 }
-                if (arr[i]&&after.disIndex < arr[i].disIndex) {
+                if (arr[i] && after.disIndex < arr[i].disIndex) {
                     after = arr[i];
                 }
             }
@@ -1185,25 +1225,25 @@
             if (beforeIndex >= 0 && !chessArr[beforeIndex].haveChess) {
                 switch (prop) {
                     case 'across':
-                    if(chessArr[beforeIndex].y==before.y){
-                        result.result++;
-                    }
+                        if (chessArr[beforeIndex].y == before.y) {
+                            result.result++;
+                        }
                         break;
                     case 'vertical':
-                    if(chessArr[beforeIndex].x==before.x){
-                        result.result++;
-                    }
+                        if (chessArr[beforeIndex].x == before.x) {
+                            result.result++;
+                        }
                         break;
                     case 'deg45':
-                    // debugger;
-                    if(chessArr[beforeIndex].x>before.x){
-                        result.result++;
-                    }
-                    break;
+                        // debugger;
+                        if (chessArr[beforeIndex].x > before.x) {
+                            result.result++;
+                        }
+                        break;
                     case 'deg135':
-                    if(chessArr[beforeIndex].x<before.x){
-                        result.result++;
-                    }
+                        if (chessArr[beforeIndex].x < before.x) {
+                            result.result++;
+                        }
                         break;
                 }
                 result.before = beforeIndex;
@@ -1211,24 +1251,24 @@
             if (afterIndex < chessArr.length && !chessArr[afterIndex].haveChess) {
                 switch (prop) {
                     case 'across':
-                    if(chessArr[afterIndex].y==after.y){
-                        result.result++;
-                    }
+                        if (chessArr[afterIndex].y == after.y) {
+                            result.result++;
+                        }
                         break;
                     case 'vertical':
-                    if(chessArr[afterIndex].x==after.x){
-                        result.result++;
-                    }
+                        if (chessArr[afterIndex].x == after.x) {
+                            result.result++;
+                        }
                         break;
                     case 'deg45':
-                    if(chessArr[afterIndex].x<after.x){
-                        result.result++;
-                    }
-                    break;
+                        if (chessArr[afterIndex].x < after.x) {
+                            result.result++;
+                        }
+                        break;
                     case 'deg135':
-                    if(chessArr[afterIndex].x>after.x){
-                        result.result++;
-                    }
+                        if (chessArr[afterIndex].x > after.x) {
+                            result.result++;
+                        }
                         break;
                 }
                 result.after = afterIndex;
@@ -1242,21 +1282,21 @@
                 //     debugger;
                 // }
                 if (!chessArr[i].haveChess) {
-                    obj[i] = getIndexObj(i, obj[i], existArr,resultArr);
+                    obj[i] = getIndexObj(i, obj[i], existArr, resultArr);
                     for (var prop in game.allState) {
                         if (game.allState.hasOwnProperty(prop)) {
                             var iChessArr = arr.concat(chessArr[i]);
                             var resultObj = game.checkWin.call(chessArr[i], iChessArr, prop);
                             var linLen = resultObj.linkArr.length;
-                            if (linLen&&linLen != 5) {
+                            if (linLen && linLen != 5) {
                                 // debugger;
                                 var otherEmpty = hasOtherChessLink(resultObj.linkArr, prop);
                                 switch (otherEmpty.result) {
                                     case 0:
                                         break;
                                     case 1:
-                                        if(linLen-1>1){
-                                            addScore(obj[i], linLen - 1, attack,prop);
+                                        if (linLen - 1 > 1) {
+                                            addScore(obj[i], linLen - 1, attack, prop);
                                         }
                                         break;
                                     case 2:
@@ -1265,26 +1305,26 @@
                                                 return ele.disIndex == otherEmpty.bfEmpty || ele.disIndex == otherEmpty.afEmpty;
                                             }).length;
                                             if (inlineLen) {
-                                                if(linLen<3){
-                                                    if(resultObj.inlineArr.length - linLen == 1){
-                                                        (hasOtherChessLink(resultObj.linkArr.concat(chessArr[otherEmpty.before]), prop).result != 2||
-                                                        hasOtherChessLink(resultObj.linkArr.concat(chessArr[otherEmpty.after]), prop).result != 2)
-                                                        &&addScore(obj[i], linLen, attack,prop)||addScore(obj[i], linLen + 1, false,prop);
-                                                    }else{
-                                                        addScore(obj[i], linLen + 1, attack,prop);
+                                                if (linLen < 3) {
+                                                    if (resultObj.inlineArr.length - linLen == 1) {
+                                                        (hasOtherChessLink(resultObj.linkArr.concat(chessArr[otherEmpty.before]), prop).result != 2 ||
+                                                            hasOtherChessLink(resultObj.linkArr.concat(chessArr[otherEmpty.after]), prop).result != 2)
+                                                            && addScore(obj[i], linLen, attack, prop) || addScore(obj[i], linLen + 1, false, prop);
+                                                    } else {
+                                                        addScore(obj[i], linLen + 1, attack, prop);
                                                     }
-                                                }else{
-                                                    addScore(obj[i], linLen + 1, attack,prop);
+                                                } else {
+                                                    addScore(obj[i], linLen + 1, attack, prop);
                                                 }
                                             } else {
-                                                addScore(obj[i], linLen, attack,prop);
+                                                addScore(obj[i], linLen, attack, prop);
                                             }
                                         } else {
-                                            addScore(obj[i], linLen, attack,prop);
+                                            addScore(obj[i], linLen, attack, prop);
                                         }
                                         break;
                                 }
-                            }else{
+                            } else {
                                 addScore(obj[i], linLen, attack);
                             }
                         }
@@ -1293,7 +1333,7 @@
             }
             return resultArr;
         }
-        function addScore(obj, num, attack,prop) {
+        function addScore(obj, num, attack, prop) {
             switch (num) {
                 case 5:
                     obj.score += attack ? 1000000 : 100000;
@@ -1335,14 +1375,14 @@
                 if (defendArr.length && times++ < 8) {
                     obj = getMaxPoint(defendArr, []);
                     obj = getMaxPoint(attackArr, obj, true);
-                    var play = obj.reduce(function(pre,item){
-                        return pre.score>item.score?pre:item;
-                    },obj[0])
-                    var playArr = obj.filter(function(ele){
+                    var play = obj.reduce(function (pre, item) {
+                        return pre.score > item.score ? pre : item;
+                    }, obj[0])
+                    var playArr = obj.filter(function (ele) {
                         return ele.score == this;
-                    },play.score)
-                    console.log(play.score,play.index);
-                    playIndex = playArr[~~(Math.random()*playArr.length)].index;
+                    }, play.score)
+                    console.log(play.score, play.index);
+                    playIndex = playArr[~~(Math.random() * playArr.length)].index;
                 } else if (!chessArr[112].haveChess) {
                     playIndex = 112;
                 } else if (this != window && times++ < 8) {
